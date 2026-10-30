@@ -1,0 +1,7 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /nursery_kv/{doc}    { allow read, write: if true; }
+    match /nursery_files/{doc} { allow read, write: if true; }
+  }
+}
