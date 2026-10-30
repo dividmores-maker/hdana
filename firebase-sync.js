@@ -3,12 +3,13 @@
    وأول ما الصفحة تفتح بتسحب آخر نسخة من Firestore قبل ما كود الصفحة يشتغل. */
 (function () {
   const firebaseConfig = {
-    apiKey: "AIzaSyBvnRi54dRrfV3FW5HFrKXI1RDobSVCq1g",
-    authDomain: "xbat-dabcd.firebaseapp.com",
-    projectId: "xbat-dabcd",
-    storageBucket: "xbat-dabcd.firebasestorage.app",
-    messagingSenderId: "108773532038",
-    appId: "1:108773532038:web:a732b7d1ac1a01876c0c07"
+    apiKey: "AIzaSyATq7BXTJEcq4HXdHsEGAYrES-O5AHRiuc",
+    authDomain: "mero-67ecf.firebaseapp.com",
+    databaseURL: "https://mero-67ecf-default-rtdb.firebaseio.com",
+    projectId: "mero-67ecf",
+    storageBucket: "mero-67ecf.firebasestorage.app",
+    messagingSenderId: "741938477701",
+    appId: "1:741938477701:web:48625e0aa6af9fdf0dc7ec"
   };
   // ===== إعدادات Cloudinary (غيّر القيمتين دول) =====
   const CLOUD_NAME = "deefnnqdm";
@@ -20,7 +21,7 @@
   const FCHUNK = 600000;          // حجم جزء الملفات (base64)
   const COL = "nursery_kv", FCOL = "nursery_files";
 
-  let db, fs, ready, status = "loading";
+  let db, fs, ready, status = "loading", initErr = "";
   const rawSet = Storage.prototype.setItem, rawRemove = Storage.prototype.removeItem;
   const timers = {}, lastPushed = {};
 
@@ -158,12 +159,12 @@
   };
 
   // ===== تشغيل كود الصفحة بعد ما الداتا تتسحب =====
-  ready = init().catch(e => { console.error("Firebase init failed", e); status = "offline"; });
+  ready = init().catch(e => { console.error("Firebase init failed", e); status = "offline"; initErr = (e && (e.code || e.message)) || String(e); });
   window.fbReady = ready;
   function run() {
     const el = document.querySelector('script[type="text/fb-app"]'); if (!el) return;
     ready.then(() => {
-      if (status === "offline") banner("مفيش اتصال بالسحابة — شغال بالداتا المحفوظة على الجهاز");
+      if (status === "offline") banner("مفيش اتصال بالسحابة (" + initErr + ") — شغال بالداتا المحفوظة على الجهاز");
       const s = document.createElement("script"); s.text = el.text; el.replaceWith(s);
     });
   }
